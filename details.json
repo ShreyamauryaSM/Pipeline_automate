@@ -10,5 +10,9 @@
     "SM train": {
         "username": "Shreya",
         "repo_url": "master"
+    },
+    "Mid": {
+        "username": "0191CSE077",
+        "repo_url": "pipeline-automate-python"
     }
 }
