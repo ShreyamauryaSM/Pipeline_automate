@@ -16,6 +16,25 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 REPO_OWNER = os.getenv("REPO_OWNER")
 REPO_NAME = os.getenv("REPO_NAME")
 
+def get_company_names(repo_owner, repo_name, github_token):
+    company_names = []
+    url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/contents/details.json'
+    headers = {
+        'Authorization': f'token {github_token}',
+        'Accept': 'application/vnd.github.v3+json'
+    }
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code == 200:
+        # Decode and parse the existing JSON content
+        existing_content = json.loads(base64.b64decode(response.json()['content']).decode())
+        company_names = list(existing_content.keys())
+    else:
+        print(f"Failed to fetch company names. Status code: {response.status_code}")
+        print("Response content:", response.content.decode())  # Print response content for debugging
+    
+    return company_names
+
 
 @app.route('/add',methods=['GET','POST'])
 def add_form():
@@ -188,9 +207,15 @@ def add_data_to_json(username, companyname, repo_url, github_token, repo_owner, 
     else:
         print(f"Failed to add data to details.json. Status code: {response.status_code}")
 
-@app.route('/')
-def hello_world():
+@app.route('/create')
+def create_user():
     return render_template("index.html")
+
+@app.route('/')
+def index():
+    company_names=get_company_names(REPO_OWNER,REPO_NAME,GITHUB_TOKEN)
+
+    return render_template("base.html",company_names=company_names)
 
 if __name__=="__main__":
     app.run(debug=True)
