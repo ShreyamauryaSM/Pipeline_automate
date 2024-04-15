@@ -6,5 +6,9 @@
     "Flipkart": {
         "username": "Shreya",
         "repo_url": "pipeline-automate-python"
+    },
+    "SM train": {
+        "username": "Shreya",
+        "repo_url": "master"
     }
 }
