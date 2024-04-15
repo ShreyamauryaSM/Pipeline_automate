@@ -35,6 +35,73 @@ def get_company_names(repo_owner, repo_name, github_token):
     
     return company_names
 
+def get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN):
+    company_details = {}
+
+    # Construct the URL for the JSON file in the GitHub repository
+    url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/details.json'
+
+    # Set up headers with authorization token
+    headers = {
+        'Authorization': f'token {GITHUB_TOKEN}',
+        'Accept': 'application/vnd.github.v3+json'
+    }
+
+    # Make GET request to GitHub API to fetch the details.json content
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        # Decode and load JSON content from response
+        json_content = json.loads(base64.b64decode(response.json()['content']).decode())
+
+        if company_name in json_content:
+            # Extract repo_name and username from the JSON content based on the company_name
+            company_info = json_content[company_name]
+            repo_name = company_info.get('repo_url')
+            username = company_info.get('username')
+
+            # Construct the URL for the YAML file based on the extracted repo_name and username
+            if repo_name and username:
+                file_path = f'Pipeline/SoftwareMathematics/{company_name}/{repo_name}/{username}.yaml'
+                yaml_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}'
+
+                # Make GET request to GitHub API to fetch the YAML content
+                yaml_response = requests.get(yaml_url, headers=headers)
+
+                if yaml_response.status_code == 200:
+                    # Decode and load YAML content from response
+                    yaml_content = yaml.safe_load(base64.b64decode(yaml_response.json()['content']).decode())
+
+                    if yaml_content is not None:
+                        # Correct the YAML syntax for each key-value pair
+                        for key, value in yaml_content.items():
+                            if isinstance(value, list):
+                                # If the value is a list, convert it to a string with comma-separated values
+                                yaml_content[key] = ', '.join(value)
+
+                        company_details = yaml_content
+                    else:
+                        print("YAML content is empty or invalid.")
+                else:
+                    print(f"Failed to fetch YAML content. Status code: {yaml_response.status_code}")
+
+    else:
+        print(f"Failed to fetch details.json. Status code: {response.status_code}")
+        print("Response content:", response.content.decode())  # Print response content for debugging
+
+    return company_details
+
+@app.route('/update', methods=['GET', 'POST'])
+def update():
+    if request.method == "GET":
+        company_name = request.args.get('company')
+        company_details=get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN)
+        return render_template("update.html", company_details=company_details)
+    elif request.method == "POST":
+        # Handle POST request data if needed
+        pass   
+    return "Updated"
+
 
 @app.route('/add',methods=['GET','POST'])
 def add_form():
