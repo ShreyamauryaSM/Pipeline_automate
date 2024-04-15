@@ -2,5 +2,9 @@
     "Cisco": {
         "username": "Shreya",
         "repo_name": "master"
+    },
+    "Flipkart": {
+        "username": "Shreya",
+        "repo_url": "pipeline-automate-python"
     }
 }
