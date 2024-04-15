@@ -1,0 +1,19 @@
+name: 0191CSE077
+company name: Mid
+repository url: https://github.com/ShreyamauryaSM/pipeline-automate-python
+enabled: no
+job_type: software
+run_command: https://github.com/SM-Training/Creating_yamlFile/tree/master
+src_path: https://github.com/SM-Training/Creating_yamlFile/tree/master
+application_port: https://github.com/SM-Training/Creating_yamlFile/tree/master
+deploy_port: https://github.com/SM-Training/Creating_yamlFile/tree/master
+ssh_port_prod: https://github.com/SM-Training/Creating_yamlFile/tree/master
+ssh_port_dev: https://github.com/SM-Training/Creating_yamlFile/tree/master
+build_command: https://github.com/SM-Training/Creating_yamlFile/tree/master
+pvt_deploy_servers_dev: deploy,servers,dev,pvt
+deploy_servers_dev: deploy,servers,dev,pvt
+pvt_deploy_servers_prod: https://github.com/SM-Training/Creating_yamlFile/tree/master
+deploy_servers_prod: deploy servers dev pvt
+deploy_env_prod: https://workspace.google.com/marketplace/app/pretty_forms_designer/1077249372154
+deploy_env_dev: https://redketchup.io/color-picker
+deploy_env:  prod dev
