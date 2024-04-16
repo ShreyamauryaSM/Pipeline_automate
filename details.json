@@ -1,5 +1,4 @@
 {
-    
     "Flipkart": {
         "username": "Shreya",
         "repo_url": "pipeline-automate-python"
@@ -8,9 +7,12 @@
         "username": "Shreya",
         "repo_url": "master"
     },
-    
     "PQRSMN": {
         "username": "Shreya",
         "repo_url": "SM mathematics"
+    },
+    "PQR": {
+        "username": "Shreya",
+        "repo_url": "pipeline-automate-python"
     }
 }
