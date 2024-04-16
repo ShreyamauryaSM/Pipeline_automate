@@ -77,7 +77,9 @@ def get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN):
                         for key, value in yaml_content.items():
                             if isinstance(value, list):
                                 # If the value is a list, convert it to a string with comma-separated values
-                                yaml_content[key] = ', '.join(value)
+                                yaml_content[key] = ' '.join(value)
+
+                                print(yaml_content)
 
                         company_details = yaml_content
                     else:
@@ -156,6 +158,20 @@ def add_form():
         deploy_env_dev = request.form.get('deployenvdev')
         deploy_env = request.form.get('deployenv')
 
+
+        # pvt_deploy_servers_dev_list = pvt_deploy_servers_dev.split('\n')
+        # deploy_servers_prod_list = deploy_servers_prod.split('\n')
+        # pvt_deploy_servers_prod_list = pvt_deploy_servers_prod.split('\n')
+        # deploy_servers_dev_list = deploy_servers_dev.split('\n')
+        # deploy_env_list = deploy_env.split('\n')
+        
+        pvt_deploy_servers_dev_list = ['- ' + ip for ip in pvt_deploy_servers_dev.split('\n') if ip]
+        deploy_servers_prod_list = ['- ' + ip for ip in deploy_servers_prod.split('\n') if ip]
+        pvt_deploy_servers_prod_list = ['- ' + ip for ip in pvt_deploy_servers_prod.split('\n') if ip]
+        deploy_servers_dev_list = ['- ' + ip for ip in deploy_servers_dev.split('\n') if ip]
+        deploy_env_list = ['- ' + ip for ip in deploy_env.split('\n') if ip]
+
+
         # Define the order of fields
         field_order = [
              "name",
@@ -191,13 +207,13 @@ def add_form():
             "ssh_port_prod": ssh_port_prod,
             "ssh_port_dev": ssh_port_dev,
             "build_command": build_command,
-            "pvt_deploy_servers_dev": pvt_deploy_servers_dev,
-            "deploy_servers_dev": deploy_servers_dev,
-            "pvt_deploy_servers_prod": pvt_deploy_servers_prod,
-            "deploy_servers_prod": deploy_servers_prod,
+            "pvt_deploy_servers_dev": pvt_deploy_servers_dev_list,
+            "deploy_servers_dev": deploy_servers_dev_list,
+            "pvt_deploy_servers_prod": pvt_deploy_servers_prod_list,
+            "deploy_servers_prod": deploy_servers_prod_list,
             "deploy_env_prod": deploy_env_prod,
             "deploy_env_dev": deploy_env_dev,
-            "deploy_env": deploy_env
+            "deploy_env": deploy_env_list
         }  
 
         data = OrderedDict((key, data[key]) for key in field_order if key in data)
