@@ -159,13 +159,12 @@ def add_form():
         deploy_env = request.form.get('deployenv')
 
 
-
         # Assuming pvt_deploy_servers_dev is a string containing IP addresses separated by spaces
-        pvt_deploy_servers_dev_list = ' -'.join(filter(None, pvt_deploy_servers_dev.split()))
-        deploy_servers_prod_list = ' -'.join(filter(None, deploy_servers_prod.split()))
-        pvt_deploy_servers_prod_list = ' -'.join(filter(None, pvt_deploy_servers_prod.split()))
-        deploy_servers_dev_list = ' -'.join(filter(None, deploy_servers_dev.split()))
-        deploy_env_list = '-'.join(filter(None, deploy_env.split()))
+        pvt_deploy_servers_dev_list = '-' + ' -'.join(filter(None, pvt_deploy_servers_dev.split()))
+        deploy_servers_prod_list = '-' + ' -'.join(filter(None, deploy_servers_prod.split()))
+        pvt_deploy_servers_prod_list = ' -' + ' -'.join(filter(None, pvt_deploy_servers_prod.split()))
+        deploy_servers_dev_list = '-' + ' -'.join(filter(None, deploy_servers_dev.split()))
+        deploy_env_list = '-' + ' -'.join(filter(None, deploy_env.split()))
 
 
         # Define the order of fields
