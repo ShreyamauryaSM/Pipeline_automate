@@ -15,13 +15,13 @@
           <div class="col-md-6">
 
       <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Name</label>
+        <label for="exampleFormControlInput1" class="form-label">Name<span class="text-danger">*</span></label>
         <input type="text" name="username" class="form-control" placeholder="Your Name" value="{{ company_details['name'] }}" required>
       </div>
       </div>
       <div class="col-md-6">
       <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Company name</label>
+        <label for="exampleFormControlInput1" class="form-label">Company name<span class="text-danger">*</span></label>
         <input type="text" name="companyname" class="form-control" placeholder="Your Company name" value="{{ company_details['company name'] }}" required>
       </div>
     </div>
@@ -31,7 +31,7 @@
         <div class="row">
             <div class="col-md-4">
               <div class="mb-3">
-                <label class="form-label">Enabled</label>
+                <label class="form-label">Enabled<span class="text-danger">*</span></label>
                 <div class="form-check">
                   <input class="form-check-input" type="radio" name="enabled" id="yesRadio" value="yes" {{ 'checked' if company_details['enabled'] == True else '' }} required>
                   <label class="form-check-label" for="yesRadio">
@@ -48,7 +48,7 @@
             </div>
             <div class="col-md-4">
               <div class="mb-3">
-                <label for="jobTypeSelect" class="form-label">Job Type</label>
+                <label for="jobTypeSelect" class="form-label">Job Type<span class="text-danger">*</span></label>
                 <select class="form-select" id="jobTypeSelect" name="job_type" required>
                   <option value="" selected>Select Your Job Type</option>
                   <option value="intern" {{ 'selected' if company_details['job_type'] == 'intern' else '' }}>Intern</option>
@@ -64,7 +64,7 @@
      
     <div class="col-md-6">
       <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">repo_url</label>
+        <label for="exampleFormControlInput1" class="form-label">repo_url<span class="text-danger">*</span></label>
         <input type="text" name="repourl" class="form-control" placeholder="repo_url" value="{{ company_details['repository url'] }}" required>
       </div>
     </div>
@@ -73,26 +73,26 @@
   <div class="row">
     <div class="col-md-6">
       <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">run_command</label>
+        <label for="exampleFormControlTextarea1" class="form-label">run_command<span class="text-danger">*</span></label>
         <input type="text" name="runcmnd" class="form-control" placeholder="Run_Command" value="{{ company_details['run_command'] }}" required>
       </div>
       </div>
         <div class="col-md-6">
       <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">src_path</label>
+        <label for="exampleFormControlTextarea1" class="form-label">src_path<span class="text-danger">*</span></label>
         <input type="text" name="srcpath" class="form-control" id="exampleFormControlInput1" placeholder="src_path" value="{{ company_details['src_path'] }}" required>
       </div>
       </div>
       <div class="row">
         <div class="col-md-6">
       <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">application_port</label>
+        <label for="exampleFormControlTextarea1" class="form-label">application_port<span class="text-danger">*</span></label>
         <input type="text" name="applicationport" class="form-control" id="exampleFormControlInput1" placeholder="" value="{{ company_details['application_port'] }}" required>
       </div>
     </div>
     <div class="col-md-6">
       <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">deploy_port</label>
+        <label for="exampleFormControlTextarea1" class="form-label">deploy_port<span class="text-danger">*</span></label>
         <input type="text" name="deployport" class="form-control" id="exampleFormControlInput1" placeholder="" value="{{ company_details['deploy_port'] }}" required>
       </div>
       </div>
@@ -114,7 +114,7 @@
   <div class="row">
     <div class="col-md-6">
       <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">build_command</label>
+        <label for="exampleFormControlTextarea1" class="form-label">build_command<span class="text-danger">*</span></label>
         <input type="text" name="buildcommand" class="form-control" id="exampleFormControlInput1" value="{{ company_details['build_command'] }}" placeholder="" required>
       </div>
       </div>
@@ -166,7 +166,7 @@
     <div class="col-md-6">
 
       <div class="mb-3">
-        <label for="exampleFormControlTextarea1" class="form-label">deploy_env</label>
+        <label for="exampleFormControlTextarea1" class="form-label">deploy_env<span class="text-danger">*</span></label>
         <input type="text" name="deployenv" class="form-control" value="{{ company_details['deploy_env'] }}" placeholder="" required>
       </div>
     </div>
