@@ -1,54 +1,16 @@
 {
-    "Cisco": {
-        "username": "Shreya",
-        "repo_name": "master"
-    },
+    
     "Flipkart": {
         "username": "Shreya",
-        "repo_url": "pipeline-automate-python"
-    },
-    "SM train": {
-        "username": "Shreya",
-        "repo_url": "master"
-    },
-    "Mid": {
-        "username": "0191CSE077",
         "repo_url": "pipeline-automate-python"
     },
     "Software Mathematics": {
         "username": "Shreya",
         "repo_url": "master"
     },
-    "ABC": {
-        "username": "admin",
-        "repo_url": "pipeline-automate-python"
-    },
-    "PQR": {
-        "username": "Shreya",
-        "repo_url": "SM mathematics"
-    },
-    "XYZ": {
-        "username": "0191CSE056",
-        "repo_url": "pipeline-automate-python"
-    },
-    "PQRXYZ": {
-        "username": "0191CSE056",
-        "repo_url": "pipeline-automate-python"
-    },
-    "KBC": {
-        "username": "Shreya",
-        "repo_url": "ys1"
-    },
-    "KBCABC": {
-        "username": "0191CSE054",
-        "repo_url": "master"
-    },
+    
     "PQRSMN": {
         "username": "Shreya",
         "repo_url": "SM mathematics"
-    },
-    "Midbrains": {
-        "username": "Shreya",
-        "repo_url": "pipeline-automate-python"
     }
 }
