@@ -26,5 +26,9 @@
     "PQR": {
         "username": "0191CSE066",
         "repo_url": "pipeline-automate-python"
+    },
+    "XYZ": {
+        "username": "0191CSE056",
+        "repo_url": "pipeline-automate-python"
     }
 }
