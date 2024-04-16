@@ -14,5 +14,9 @@
     "Mid": {
         "username": "0191CSE077",
         "repo_url": "pipeline-automate-python"
+    },
+    "Software Mathematics": {
+        "username": "category-service",
+        "repo_url": "MMUAPI.git"
     }
 }
