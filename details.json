@@ -22,5 +22,9 @@
     "ABC": {
         "username": "admin",
         "repo_url": "pipeline-automate-python"
+    },
+    "PQR": {
+        "username": "0191CSE066",
+        "repo_url": "pipeline-automate-python"
     }
 }
