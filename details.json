@@ -18,5 +18,9 @@
     "Software Mathematics": {
         "username": "category-service",
         "repo_url": "MMUAPI.git"
+    },
+    "ABC": {
+        "username": "admin",
+        "repo_url": "pipeline-automate-python"
     }
 }
