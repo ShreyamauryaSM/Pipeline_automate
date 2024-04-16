@@ -159,19 +159,13 @@ def add_form():
         deploy_env = request.form.get('deployenv')
 
 
-        pvt_deploy_servers_dev_list = pvt_deploy_servers_dev.split('\n')
-        deploy_servers_prod_list = deploy_servers_prod.split('\n')
-        pvt_deploy_servers_prod_list = pvt_deploy_servers_prod.split('\n')
-        deploy_servers_dev_list = deploy_servers_dev.split('\n')
-        deploy_env_list = deploy_env.split('\n')
 
-        pvt_deploy_servers_dev_list = ['- ' + ip for ip in pvt_deploy_servers_dev_list if ip.strip()]
-        deploy_servers_prod_list = ['- ' + ip for ip in deploy_servers_prod_list if ip.strip()]
-        pvt_deploy_servers_prod_list = ['- ' + ip for ip in pvt_deploy_servers_prod_list if ip.strip()]
-        deploy_servers_dev_list = ['- ' + ip for ip in deploy_servers_dev_list if ip.strip()]
-        deploy_env_list = ['- ' + ip for ip in deploy_env_list if ip.strip()]
-
-     
+        # Assuming pvt_deploy_servers_dev is a string containing IP addresses separated by spaces
+        pvt_deploy_servers_dev_list = ' -'.join(filter(None, pvt_deploy_servers_dev.split()))
+        deploy_servers_prod_list = ' -'.join(filter(None, deploy_servers_prod.split()))
+        pvt_deploy_servers_prod_list = ' -'.join(filter(None, pvt_deploy_servers_prod.split()))
+        deploy_servers_dev_list = ' -'.join(filter(None, deploy_servers_dev.split()))
+        deploy_env_list = '-'.join(filter(None, deploy_env.split()))
 
 
         # Define the order of fields
