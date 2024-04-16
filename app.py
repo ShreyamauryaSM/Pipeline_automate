@@ -91,16 +91,45 @@ def get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN):
 
     return company_details
 
+from flask import request, render_template, redirect, url_for
+
 @app.route('/update', methods=['GET', 'POST'])
 def update():
     if request.method == "GET":
         company_name = request.args.get('company')
-        company_details=get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN)
+        company_details = get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN)
         return render_template("update.html", company_details=company_details)
     elif request.method == "POST":
-        # Handle POST request data if needed
-        pass   
+        # Extract data from the form
+        new_data = {
+            'name': request.form.get('username'),
+            'company_name': request.form.get('companyname'),
+            'enabled': request.form.get('enabled') == 'yes',  # Convert to boolean
+            'job_type': request.form.get('job_type'),
+            'repository_url': request.form.get('repourl'),
+            'run_command': request.form.get('runcmnd'),
+            'src_path': request.form.get('srcpath'),
+            'application_port': request.form.get('applicationport'),
+            'deploy_port': request.form.get('deployport'),
+            'ssh_port_prod': request.form.get('sshportprod'),
+            'ssh_port_dev': request.form.get('sshportdev'),
+            'build_command': request.form.get('buildcommand'),
+            'pvt_deploy_servers_dev': request.form.get('pvtdeployserversdev'),
+            'deploy_servers_dev': request.form.get('deployserversdev'),
+            'pvt_deploy_servers_prod': request.form.get('pvtdeployserversprod'),
+            'deploy_servers_prod': request.form.get('deployserversprod'),
+            'deploy_env_prod': request.form.get('deployenvprod'),
+            'deploy_env_dev': request.form.get('deployenvdev'),
+            'deploy_env': request.form.get('deployenv')
+        }
+        
+        # Update the company details with the new data
+        # Example: update_company_details(company_name, new_data)
+        
+        # Redirect to a success page or back to the update page
+        return redirect(url_for('update'))  # Redirect to the update page
     return "Updated"
+
 
 
 
