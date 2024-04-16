@@ -35,6 +35,11 @@ def get_company_names(repo_owner, repo_name, github_token):
     
     return company_names
 
+# import json
+# import base64
+# import requests
+# import yaml
+
 def get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN):
     company_details = {}
 
@@ -75,11 +80,13 @@ def get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN):
                     if yaml_content is not None:
                         # Correct the YAML syntax for each key-value pair
                         for key, value in yaml_content.items():
-                            if isinstance(value, list):
-                                # If the value is a list, convert it to a string with comma-separated values
-                                yaml_content[key] = ' '.join(value)
-
-                                print(yaml_content)
+                            if isinstance(value, str):  # Assuming IP addresses are given as strings
+                                # Split the string into a list of IP addresses
+                                formatted_string= value.replace('-', '').split()
+                                # Prefix each IP address with a hyphen
+                                formatted_string_space = ' '.join(formatted_string)
+                                # Join the IP addresses back into a single string
+                                yaml_content[key] = formatted_string_space
 
                         company_details = yaml_content
                     else:
