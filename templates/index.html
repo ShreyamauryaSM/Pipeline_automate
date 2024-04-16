@@ -194,12 +194,12 @@
           var allFields = document.querySelectorAll('.mandatory-fields');
       
           deployEnvField.addEventListener('input', function() {
-              if (deployEnvField.value === '-dev') {
+              if (deployEnvField.value === 'dev') {
                   sshPortDevField.required = true;
                   pvtDeployServersDevField.required = true;
                   deployServersDevField.required = true;
                   deployEnvDevField.required = true;
-              } else if (deployEnvField.value === '-prod' || deployEnvField.value === '-prod,-dev' || deployEnvField.value === '-dev,-prod') {
+              } else if (deployEnvField.value === 'prod' || deployEnvField.value === 'prod,dev' || deployEnvField.value === 'dev,prod') {
                   allFields.forEach(function(field) {
                       field.required = true;
                   });
