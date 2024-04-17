@@ -18,5 +18,9 @@
     "q": {
         "username": "test",
         "repo_url": "afsa.git"
+    },
+    "test": {
+        "username": "test2",
+        "repo_url": "a.git"
     }
 }
