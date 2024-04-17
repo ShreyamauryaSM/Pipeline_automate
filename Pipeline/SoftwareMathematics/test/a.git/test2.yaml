@@ -9,11 +9,11 @@ application_port: 67
 deploy_port: 76
 ssh_port_prod: 3443
 ssh_port_dev: 43
-build_command: apt update
-pvt_deploy_servers_dev: -43
-deploy_servers_dev: -343
-pvt_deploy_servers_prod:  -43
-deploy_servers_prod: -65
+build_command: apt install
+pvt_deploy_servers_dev: --43
+deploy_servers_dev: --343
+pvt_deploy_servers_prod:  --43
+deploy_servers_prod: --65
 deploy_env_prod: 65
 deploy_env_dev: 65
 deploy_env: -dev,prod
