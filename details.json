@@ -14,5 +14,9 @@
     "PQR": {
         "username": "Shreya",
         "repo_url": "pipeline-automate-python"
+    },
+    "q": {
+        "username": "test",
+        "repo_url": "afsa.git"
     }
 }
