@@ -1,0 +1,19 @@
+name: 3
+company name: 1
+repository url: 2
+enabled: yes
+job_type: web
+run_command: sudo su
+src_path: 12
+application_port: 21
+deploy_port: 21
+ssh_port_prod: 
+ssh_port_dev: 312
+build_command: apt install
+pvt_deploy_servers_dev: -312
+deploy_servers_dev: -312
+pvt_deploy_servers_prod:  -
+deploy_servers_prod: -
+deploy_env_prod: 
+deploy_env_dev: 123
+deploy_env: -dev
