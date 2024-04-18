@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,redirect,url_for
 import requests
 import yaml
 import os
@@ -6,6 +6,7 @@ import base64
 from collections import OrderedDict
 from dotenv import load_dotenv
 import json
+
 
 load_dotenv()
 
@@ -35,10 +36,6 @@ def get_company_names(repo_owner, repo_name, github_token):
     
     return company_names
 
-# import json
-# import base64
-# import requests
-# import yaml
 
 def get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN):
     company_details = {}
@@ -77,12 +74,15 @@ def get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN):
                     # Decode and load YAML content from response
                     yaml_content = yaml.safe_load(base64.b64decode(yaml_response.json()['content']).decode())
 
+                    # Check if yaml_content is not None
                     if yaml_content is not None:
                         # Correct the YAML syntax for each key-value pair
                         for key, value in yaml_content.items():
-                            if isinstance(value, str):  # Assuming IP addresses are given as strings
+                            if value is None:  # Check if the value is None
+                                yaml_content[key] = ""  # Assign an empty string if value is None
+                            elif isinstance(value, str):  # Assuming IP addresses are given as strings
                                 # Split the string into a list of IP addresses
-                                formatted_string= value.replace('-', '').split()
+                                formatted_string = value.replace('-', '').split()
                                 # Prefix each IP address with a hyphen
                                 formatted_string_space = ' '.join(formatted_string)
                                 # Join the IP addresses back into a single string
@@ -90,7 +90,7 @@ def get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN):
 
                         company_details = yaml_content
                     else:
-                        print("YAML content is empty or invalid.")
+                        company_details = {}
                 else:
                     print(f"Failed to fetch YAML content. Status code: {yaml_response.status_code}")
 
@@ -99,48 +99,6 @@ def get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN):
         print("Response content:", response.content.decode())  # Print response content for debugging
 
     return company_details
-
-from flask import request, render_template, redirect, url_for
-
-@app.route('/update', methods=['GET', 'POST'])
-def update():
-    if request.method == "GET":
-        company_name = request.args.get('company')
-        company_details = get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN)
-        return render_template("update.html", company_details=company_details)
-    elif request.method == "POST":
-        # Extract data from the form
-        new_data = {
-            'name': request.form.get('username'),
-            'company_name': request.form.get('companyname'),
-            'enabled': request.form.get('enabled') == 'yes',  # Convert to boolean
-            'job_type': request.form.get('job_type'),
-            'repository_url': request.form.get('repourl'),
-            'run_command': request.form.get('runcmnd'),
-            'src_path': request.form.get('srcpath'),
-            'application_port': request.form.get('applicationport'),
-            'deploy_port': request.form.get('deployport'),
-            'ssh_port_prod': request.form.get('sshportprod'),
-            'ssh_port_dev': request.form.get('sshportdev'),
-            'build_command': request.form.get('buildcommand'),
-            'pvt_deploy_servers_dev': request.form.get('pvtdeployserversdev'),
-            'deploy_servers_dev': request.form.get('deployserversdev'),
-            'pvt_deploy_servers_prod': request.form.get('pvtdeployserversprod'),
-            'deploy_servers_prod': request.form.get('deployserversprod'),
-            'deploy_env_prod': request.form.get('deployenvprod'),
-            'deploy_env_dev': request.form.get('deployenvdev'),
-            'deploy_env': request.form.get('deployenv')
-        }
-        
-        # Update the company details with the new data
-        # Example: update_company_details(company_name, new_data)
-        
-        # Redirect to a success page or back to the update page
-        return redirect(url_for('update'))  # Redirect to the update page
-    return "Updated"
-
-
-
 
 @app.route('/add',methods=['GET','POST'])
 def add_form():
@@ -167,11 +125,12 @@ def add_form():
 
 
         # Assuming pvt_deploy_servers_dev is a string containing IP addresses separated by spaces
-        pvt_deploy_servers_dev_list = '-' + ' -'.join(filter(None, pvt_deploy_servers_dev.split()))
-        deploy_servers_prod_list = '-' + ' -'.join(filter(None, deploy_servers_prod.split()))
-        pvt_deploy_servers_prod_list = ' -' + ' -'.join(filter(None, pvt_deploy_servers_prod.split()))
-        deploy_servers_dev_list = '-' + ' -'.join(filter(None, deploy_servers_dev.split()))
-        deploy_env_list = '-' + ' -'.join(filter(None, deploy_env.split()))
+        pvt_deploy_servers_dev_list = ' '.join(['-' + ip for ip in filter(None, pvt_deploy_servers_dev.split())]) if pvt_deploy_servers_dev else ''
+        deploy_servers_prod_list = ' '.join(['-' + ip for ip in filter(None, deploy_servers_prod.split())]) if deploy_servers_prod else ''
+        pvt_deploy_servers_prod_list = ' '.join(['-' + ip for ip in filter(None, pvt_deploy_servers_prod.split())]) if pvt_deploy_servers_prod else ''
+        deploy_servers_dev_list = ' '.join(['-' + ip for ip in filter(None, deploy_servers_dev.split())]) if deploy_servers_dev else ''
+        deploy_env_list = ' '.join(['-' + ip for ip in filter(None, deploy_env.split())]) if deploy_env else ''
+
 
 
         # Define the order of fields
@@ -321,6 +280,42 @@ def add_data_to_json(username, companyname, repo_url, github_token, repo_owner, 
         print("Data added successfully to details.json.")
     else:
         print(f"Failed to add data to details.json. Status code: {response.status_code}")
+        
+
+@app.route('/update', methods=['GET', 'POST'])
+def update():
+    if request.method == "GET":
+        company_name = request.args.get('company')
+        company_details = get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN)
+        return render_template("update.html", company_details=company_details)
+    elif request.method == "POST":
+        # Extract data from the form
+        new_data = {
+            'name': request.form.get('username'),
+            'company_name': request.form.get('companyname'),
+            'enabled': request.form.get('enabled') == 'yes',  # Convert to boolean
+            'job_type': request.form.get('job_type'),
+            'repository_url': request.form.get('repourl'),
+            'run_command': request.form.get('runcmnd'),
+            'src_path': request.form.get('srcpath'),
+            'application_port': request.form.get('applicationport'),
+            'deploy_port': request.form.get('deployport'),
+            'ssh_port_prod': request.form.get('sshportprod'),
+            'ssh_port_dev': request.form.get('sshportdev'),
+            'build_command': request.form.get('buildcommand'),
+            'pvt_deploy_servers_dev': request.form.get('pvtdeployserversdev'),
+            'deploy_servers_dev': request.form.get('deployserversdev'),
+            'pvt_deploy_servers_prod': request.form.get('pvtdeployserversprod'),
+            'deploy_servers_prod': request.form.get('deployserversprod'),
+            'deploy_env_prod': request.form.get('deployenvprod'),
+            'deploy_env_dev': request.form.get('deployenvdev'),
+            'deploy_env': request.form.get('deployenv')
+        }
+        
+        # Redirect to a success page or back to the update page
+        return redirect(url_for('update'))  # Redirect to the update page
+    return "Updated"
+
 
 @app.route('/create')
 def create_user():
@@ -329,7 +324,6 @@ def create_user():
 @app.route('/')
 def index():
     company_names=get_company_names(REPO_OWNER,REPO_NAME,GITHUB_TOKEN)
-
     return render_template("base.html",company_names=company_names)
 
 if __name__ == "__main__":
