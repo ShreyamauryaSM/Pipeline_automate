@@ -22,5 +22,9 @@
     "test": {
         "username": "test2",
         "repo_url": "a.git"
+    },
+    "a": {
+        "username": "c",
+        "repo_url": "b"
     }
 }
