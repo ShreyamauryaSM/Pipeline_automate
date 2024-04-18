@@ -26,5 +26,9 @@
     "a": {
         "username": "c",
         "repo_url": "b"
+    },
+    "b": {
+        "username": "a",
+        "repo_url": "c"
     }
 }
