@@ -42,5 +42,9 @@
     "Midbrains": {
         "username": "0191CSE065",
         "repo_url": "pipeline-automate-pytho"
+    },
+    "xyz": {
+        "username": "a",
+        "repo_url": "a"
     }
 }
