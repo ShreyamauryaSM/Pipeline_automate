@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request,redirect,url_for
+from flask import Flask, jsonify, render_template, request,redirect,url_for
 import requests
 import yaml
 import os
@@ -17,23 +17,51 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 REPO_OWNER = os.getenv("REPO_OWNER")
 REPO_NAME = os.getenv("REPO_NAME")
 
+
+def fetch_repo_names(company_name, access_token):
+    repo_names = []
+    
+    target_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/Pipeline/SoftwareMathematics/{company_name}'
+
+    # = f"{api_url}/contents/Pipeline/SoftwareMathematics/{company_name}"
+
+    headers = {"Authorization": f"token {access_token}"} if access_token else {}
+
+    response = requests.get(target_url, headers=headers)
+
+    if response.status_code != 200:
+        print(f"Failed to fetch repositories. Status code: {response.status_code}")
+        return repo_names
+
+    for item in response.json():
+        if item["type"] == "dir":
+            repo_names.append(item["name"])
+
+    return repo_names
+
+
 def get_company_names(repo_owner, repo_name, github_token):
     company_names = []
-    url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/contents/details.json'
+
+    url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/contents/Pipeline/SoftwareMathematics'
     headers = {
         'Authorization': f'token {github_token}',
         'Accept': 'application/vnd.github.v3+json'
     }
+
     response = requests.get(url, headers=headers)
-    
+
     if response.status_code == 200:
-        # Decode and parse the existing JSON content
-        existing_content = json.loads(base64.b64decode(response.json()['content']).decode())
-        company_names = list(existing_content.keys())
+        # Parse the response JSON
+        content = response.json()
+        # Filter out directories
+        directories = [item['name'] for item in content if item['type'] == 'dir']
+        # Append directory names to company_names list
+        company_names.extend(directories)
     else:
         print(f"Failed to fetch company names. Status code: {response.status_code}")
         print("Response content:", response.content.decode())  # Print response content for debugging
-    
+
     return company_names
 
 
@@ -41,7 +69,8 @@ def get_company_details(company_name, REPO_OWNER, REPO_NAME, GITHUB_TOKEN):
     company_details = {}
 
     # Construct the URL for the JSON file in the GitHub repository
-    url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/details.json'
+    file_path = f'Pipeline/SoftwareMathematics/company name'
+
 
     # Set up headers with authorization token
     headers = {
@@ -321,10 +350,31 @@ def update():
 def create_user():
     return render_template("index.html")
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    company_names=get_company_names(REPO_OWNER,REPO_NAME,GITHUB_TOKEN)
-    return render_template("base.html",company_names=company_names)
+    if request.method == 'POST':
+        # Handle the POST request here
+        data = request.get_json()  # Get the JSON data from the request
+        selected_company = data.get('company_name')  # Extract the selected company name
+        print("Selected Company:", selected_company)  # Print selected company name
+        
+        # Placeholder, replace with your POST request handling code
+        # For example, you can fetch repository names based on the selected company
+        
+        # Call the function to fetch repo names using the selected company name
+        repo_names = fetch_repo_names(selected_company, GITHUB_TOKEN)
+        print("Repository Names:",repo_names)  # Print the fetched repository names
+        
+        # Return a JSON response with the repository names
+        return jsonify(repo_names)
+    else:
+        # Handle the GET request here
+        company_names = get_company_names(REPO_OWNER, REPO_NAME, GITHUB_TOKEN)
+        repo_names = fetch_repo_names(company_names, GITHUB_TOKEN)
+        print(repo_names)
+
+        return render_template("base.html", company_names=company_names, repo_names=repo_names)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
