@@ -13,17 +13,14 @@ load_dotenv()
 app = Flask(__name__)
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-
 REPO_OWNER = os.getenv("REPO_OWNER")
 REPO_NAME = os.getenv("REPO_NAME")
 
-import requests
-import base64
 
-def fetch_file_names(repo_owner, repo_name, folder_path, access_token):
+def fetch_file_names(company_name,repo_name, access_token):
     file_names = []
     
-    target_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{folder_path}'
+    target_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/Pipeline/SoftwareMathematics/{company_name}/{repo_name}'
     headers = {"Authorization": f"token {access_token}"} if access_token else {}
 
     response = requests.get(target_url, headers=headers)
@@ -38,19 +35,12 @@ def fetch_file_names(repo_owner, repo_name, folder_path, access_token):
 
     return file_names
 
-# Replace these variables with your actual values
-folder_path = "Pipeline/SoftwareMathematics/XYZ/a"
-
-file_names = fetch_file_names(REPO_OWNER, REPO_NAME, folder_path, GITHUB_TOKEN)
-print(file_names)
-
+# print(fetch_file_names("XYZ","a",GITHUB_TOKEN))
 
 def fetch_repo_names(company_name, access_token):
     repo_names = []
     
     target_url = f'https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/Pipeline/SoftwareMathematics/{company_name}'
-
-    # = f"{api_url}/contents/Pipeline/SoftwareMathematics/{company_name}"
 
     headers = {"Authorization": f"token {access_token}"} if access_token else {}
 
@@ -377,30 +367,92 @@ def update():
 def create_user():
     return render_template("index.html")
 
+# @app.route('/', methods=['GET', 'POST'])
+# def index():
+#     if request.method == 'POST':
+#         # Handle the POST request here
+#         data = request.get_json()  # Get the JSON data from the request
+#         selected_company = data.get('company_name')  # Extract the selected company name
+#         selected_repo = data.get('repo_url')  # Extract the selected repository URL
+#         print("Selected Company:", selected_company)  # Print selected company name
+#         print("Selected Repository:", selected_repo)  # Print selected repository URL
+        
+#         # Placeholder, replace with your POST request handling code
+#         # For example, you can fetch file names based on the selected repository
+        
+#         # Call the function to fetch file names using the selected repository URL
+#         file_names = fetch_file_names(selected_company,selected_repo, GITHUB_TOKEN)
+#         print("File Names:", file_names)  # Print the fetched file names
+        
+#         # Return a JSON response with the file names
+#         return jsonify(file_names)
+#     else:
+#         # Handle the GET request here
+#         company_names = get_company_names(REPO_OWNER, REPO_NAME, GITHUB_TOKEN)
+#         repo_names = fetch_repo_names(company_names, GITHUB_TOKEN)
+#         print(repo_names)
+
+#         return render_template("base.html", company_names=company_names, repo_names=repo_names)
+# In your Flask route function
+# @app.route('/', methods=['GET', 'POST'])
+# def index():
+#     if request.method == 'POST':
+#         # Handle the POST request here
+#         data = request.get_json()  # Get the JSON data from the request
+#         selected_company = data.get('company_name')  # Extract the selected company name
+#         print("Selected Company:", selected_company)  # Print selected company name
+        
+#         # Call the function to fetch repo names using the selected company name
+#         repo_names = fetch_repo_names(selected_company, GITHUB_TOKEN)
+#         print("Repository Names:", repo_names)  # Print the fetched repository names
+        
+#         # Return a JSON response with the repository names
+#         return jsonify(repo_names)
+#     else:
+#         # Handle the GET request here
+#         company_names = get_company_names(REPO_OWNER, REPO_NAME, GITHUB_TOKEN)
+#         print("Company Names:", company_names)  # Print the fetched company names
+
+#         return render_template("base.html", company_names=company_names)
+    
+# @app.route('/', methods=['GET', 'POST'])
+# from flask import jsonify
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         # Handle the POST request here
         data = request.get_json()  # Get the JSON data from the request
-        selected_company = data.get('company_name')  # Extract the selected company name
-        print("Selected Company:", selected_company)  # Print selected company name
+        company_names = data.get('company_name')  # Extract the selected company name
+        repo_names = data.get('repo_name')  # Extract the selected repository name
+
+        if company_names:
+            # If the company is selected but no repository is selected
+            # Fetch the repository names based on the selected company
+            repo_names = fetch_repo_names(company_names, GITHUB_TOKEN)
+            print("Repository Names:", repo_names)  # Print the fetched repository names
+            
+            # Return a JSON response with the repository names
+            return jsonify(repo_names)
         
-        # Placeholder, replace with your POST request handling code
-        # For example, you can fetch repository names based on the selected company
+        if repo_names:
+            # If both the company and repository are selected
+            # Fetch the file names based on the selected company and repository
+            file_names = fetch_file_names(company_names, repo_names, GITHUB_TOKEN)
+            print("File Names:", file_names)  # Print the fetched file names
+            
+            # Return a JSON response with the file names 
+            return jsonify(file_names)
         
-        # Call the function to fetch repo names using the selected company name
-        repo_names = fetch_repo_names(selected_company, GITHUB_TOKEN)
-        print("Repository Names:",repo_names)  # Print the fetched repository names
-        
-        # Return a JSON response with the repository names
-        return jsonify(repo_names)
+        else:
+            # If no valid data is provided, return an empty response
+            return jsonify({})
     else:
         # Handle the GET request here
         company_names = get_company_names(REPO_OWNER, REPO_NAME, GITHUB_TOKEN)
-        repo_names = fetch_repo_names(company_names, GITHUB_TOKEN)
-        print(repo_names)
+        print("Company Names:", company_names)  # Print the fetched company names
 
-        return render_template("base.html", company_names=company_names, repo_names=repo_names)
+        return render_template("base.html", company_names=company_names)
 
 
 if __name__ == "__main__":
