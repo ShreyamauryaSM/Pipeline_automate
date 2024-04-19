@@ -17,6 +17,33 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 REPO_OWNER = os.getenv("REPO_OWNER")
 REPO_NAME = os.getenv("REPO_NAME")
 
+import requests
+import base64
+
+def fetch_file_names(repo_owner, repo_name, folder_path, access_token):
+    file_names = []
+    
+    target_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{folder_path}'
+    headers = {"Authorization": f"token {access_token}"} if access_token else {}
+
+    response = requests.get(target_url, headers=headers)
+
+    if response.status_code != 200:
+        print(f"Failed to fetch Files. Status code: {response.status_code}")
+        return file_names
+
+    for item in response.json():
+        if item["type"] == "file":
+            file_names.append(item["name"])
+
+    return file_names
+
+# Replace these variables with your actual values
+folder_path = "Pipeline/SoftwareMathematics/567/pipeline-automate-python"
+
+file_names = fetch_file_names(REPO_OWNER, REPO_NAME, folder_path, GITHUB_TOKEN)
+print(file_names)
+
 
 def fetch_repo_names(company_name, access_token):
     repo_names = []
