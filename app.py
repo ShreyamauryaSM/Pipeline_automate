@@ -39,7 +39,7 @@ def fetch_file_names(repo_owner, repo_name, folder_path, access_token):
     return file_names
 
 # Replace these variables with your actual values
-folder_path = "Pipeline/SoftwareMathematics/567/pipeline-automate-python"
+folder_path = "Pipeline/SoftwareMathematics/XYZ/a"
 
 file_names = fetch_file_names(REPO_OWNER, REPO_NAME, folder_path, GITHUB_TOKEN)
 print(file_names)
