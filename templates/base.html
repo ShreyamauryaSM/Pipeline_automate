@@ -213,24 +213,24 @@ document.getElementById("company").addEventListener("change", sendCompanyName);
 
 <body>
   <!-- <div class="container"> -->
-    <h1 class="text-center p-3">Welcome to Pipeline Automation</h1>
-    <div class="row mt-5">
-      <!-- New User Section -->
-      <div class="col-6 col-md-6 text-center">
-        <h2>Create new pipeline</h2>
-        <a class="btn btn-primary" href="/create">New pipeline</a>
-      </div>  
-      <div class="col-md-3 text-center">
-        <h2>Existing pipeline user</h2>
-        <form id="companyForm">
-          <!-- <label for="companySelect" class="form-label">Company Name</label> -->
-          <select class="form-select" id="companySelect" name="company_name">
-            {% for company in company_names %}
-            <option value="{{ company }}">{{ company }}</option>
-            {% endfor %}
-          </select>
-        </form>
-        <div class="row">
+  <h1 class="text-center p-3">Welcome to Pipeline Automation</h1>
+  <div class="row mt-5">
+    <!-- New User Section -->
+    <div class="col-6 col-md-6 text-center">
+      <h2>Create new pipeline</h2>
+      <a class="btn btn-primary" href="/create">New pipeline</a>
+    </div>
+    <div class="col-md-3 text-center">
+      <h2>Existing pipeline user</h2>
+      <form id="companyForm">
+        <!-- <label for="companySelect" class="form-label">Company Name</label> -->
+        <select class="form-select" id="companySelect" name="company_name">
+          {% for company in company_names %}
+          <option value="{{ company }}">{{ company }}</option>
+          {% endfor %}
+        </select>
+      </form>
+      <div class="row">
         <div class="col-md-6 text-center reposelect">
           <!-- <h2>Select Repository</h2> -->
           <form id="repoForm">
@@ -242,18 +242,18 @@ document.getElementById("company").addEventListener("change", sendCompanyName);
             </div>
           </form>
         </div>
-          <div class="col-md-6 text-center fileselect">
-            <label for="fileSelect" class="form-label">Select File</label>
-            <select class="form-select" id="fileSelect" name="file_name" disabled>
-              <option value="">Select a repository first</option>
-            </select>
-          </div>
+        <div class="col-md-6 text-center fileselect">
+          <label for="fileSelect" class="form-label">Select File</label>
+          <select class="form-select" id="fileSelect" name="file_name" disabled>
+            <option value="">Select a repository first</option>
+          </select>
         </div>
-        </div>
+      </div>
     </div>
+  </div>
 
   <!-- </div> -->
-    <script>
+  <script>
     document.addEventListener("DOMContentLoaded", function () {
       const companySelect = document.getElementById("companySelect");
       const repoSelect = document.getElementById("repoSelect");
@@ -282,6 +282,17 @@ document.getElementById("company").addEventListener("change", sendCompanyName);
         fileSelect.disabled = true;
         fileSelect.innerHTML = "<option value=''>Loading...</option>";
         fetchFileNames(selectedCompany, selectedRepo);
+      });
+
+      fileSelect.addEventListener("change", function () {
+        const selectedCompany = companySelect.value;
+        const selectedRepo = repoSelect.value;
+        const selectedFile = this.value;
+        Array.from(fileselect).forEach(element => {
+          element.style.display = "block";
+        });
+        fileSelect.disabled = false;
+        fetchAllNames(selectedCompany, selectedRepo, selectedFile);
       });
 
 
@@ -332,6 +343,24 @@ document.getElementById("company").addEventListener("change", sendCompanyName);
           .catch(error => {
             console.error("Error fetching file names:", error);
             fileSelect.innerHTML = "<option value=''>Failed to fetch files</option>";
+          });
+      }
+
+      function fetchAllNames(company, repo, file) {
+        fetch(`/update?company_name=${company}&repo_name=${repo}&file_name=${file}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          },
+        })
+          .then(response => {
+            if (response.ok) {
+              window.location.href = `/update?company_name=${company}&repo_name=${repo}&file_name=${file}`;
+              console.error("Error:", response.statusText);
+            }
+          })
+          .catch(error => {
+            console.error("Error:", error);
           });
       }
 
